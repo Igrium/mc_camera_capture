@@ -21,23 +21,26 @@ def import_camera(filepath: str, context: bpy.context):
     context.scene.collection.objects.link(camera_object)
     camera_object.rotation_mode = 'QUATERNION'
 
+    cursor = context.scene.cursor.location
+    
     # Animation
     for i in range(0, len(lines)):
         line = lines[i]
         data = line.split(' ')
+        first = lines[0].split(' ')
 
         delta = float(data[0])
         
-        posX = float(data[1])
-        posY = float(data[2]) 
-        posZ = float(data[3])
+        posX = float(data[1]) - float(first[1])
+        posY = float(data[2]) - float(first[2])
+        posZ = float(data[3]) - float(first[3])
 
         rotW = float(data[4])
         rotX = float(data[5])
         rotY = float(data[6])
         rotZ = float(data[7])
 
-        camera_object.location = [-posX, posZ, posY]
+        camera_object.location = [-posX + cursor[0], posZ + cursor[1], posY + cursor[2]]
         quat = Quaternion([rotW, -rotX, rotY, -rotZ])
         quat.rotate(Euler([math.radians(90), 0, 0]))
 
