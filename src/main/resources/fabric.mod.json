@@ -9,8 +9,8 @@
     "Igrium"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://github.com/Sam54123/mc_camera_capture",
+    "sources": "https://github.com/Sam54123/mc_camera_capture"
   },
 
   "license": "GPL",
@@ -25,7 +25,7 @@
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "mcap.mixins.json"
   ],
 
   "depends": {
