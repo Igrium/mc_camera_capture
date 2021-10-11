@@ -45,7 +45,7 @@ public final class CaptureCommand {
                     if (!capturesFolder.toFile().isDirectory()) {
                         capturesFolder.toFile().mkdir();
                     }
-                    File targetFile = capturesFolder.resolve(formatter.format(new Date())+".cap").toFile();
+                    File targetFile = capturesFolder.resolve(formatter.format(new Date())+".mcap").toFile();
                     Recorder.save(recorder.getMemory(), targetFile);
                     context.getSource().sendFeedback(new LiteralText("Saved file to "+targetFile.toString()));
                 } catch (IOException e) {

@@ -54,7 +54,7 @@ public class Recorder {
         public void onStartTick(MinecraftClient client) {
             if (!isRecording) return;
             Camera camera = client.gameRenderer.getCamera();
-            memory.add(new Frame(client.getTickDelta(), camera.getPos(), camera.getRotation()));
+            memory.add(new Frame(client.getLastFrameDuration(), camera.getPos(), camera.getRotation().copy()));
         }
         
     };
@@ -91,8 +91,7 @@ public class Recorder {
         PrintWriter writer = new PrintWriter(new BufferedOutputStream(out));
         for (Frame frame : frames) {
             String pos = frame.position.x + " " + frame.position.y + " " + frame.position.z;
-            String rot = frame.rotation.getW() + " " + frame.position.getX() + " " + frame.position.getY() + " " + frame.position.getZ();
-
+            String rot = frame.rotation.getW() + " " + frame.rotation.getX() + " " + frame.rotation.getY() + " " + frame.rotation.getZ();
             writer.println(frame.delta + " " + pos + " " + rot);
         }
         writer.close();
