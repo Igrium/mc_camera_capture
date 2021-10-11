@@ -13,6 +13,9 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents.StartTick;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents.AfterEntities;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.util.math.Quaternion;
@@ -39,22 +42,31 @@ public class Recorder {
     
     private List<Frame> memory = new ArrayList<>();
     private boolean isRecording = false;
+    private Long lastFrameTime = null;
 
     /**
      * Create a recorder.
      * @param camera The camera to capture.
      */
     public Recorder() {
-        ClientTickEvents.START_CLIENT_TICK.register(listener);
+        WorldRenderEvents.AFTER_ENTITIES.register(listener);
     }
 
-    private StartTick listener = new StartTick(){
+    private AfterEntities listener = new AfterEntities(){
 
         @Override
-        public void onStartTick(MinecraftClient client) {
+        public void afterEntities(WorldRenderContext context) {
             if (!isRecording) return;
-            Camera camera = client.gameRenderer.getCamera();
-            memory.add(new Frame(client.getLastFrameDuration(), camera.getPos(), camera.getRotation().copy()));
+            Camera camera = context.camera();
+            long delta;
+            long now = System.currentTimeMillis();
+            if (lastFrameTime == null) {
+                delta = 0;
+            } else {
+                delta = now - lastFrameTime;
+            }
+            memory.add(new Frame(delta, camera.getPos(), camera.getRotation().copy()));
+            lastFrameTime = now;   
         }
         
     };
@@ -66,6 +78,7 @@ public class Recorder {
 
         memory = new ArrayList<>();
         isRecording = true;
+        lastFrameTime = null;
     }
 
     public void stop() {

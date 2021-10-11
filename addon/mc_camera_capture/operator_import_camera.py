@@ -24,12 +24,15 @@ def import_camera(filepath: str, context: bpy.context):
     cursor = context.scene.cursor.location
     
     # Animation
+    time_milis: float = 0
+    frame_rate = context.scene.render.fps / context.scene.render.fps_base
     for i in range(0, len(lines)):
         line = lines[i]
         data = line.split(' ')
         first = lines[0].split(' ')
 
         delta = float(data[0])
+        time_milis += delta
         
         posX = float(data[1]) - float(first[1])
         posY = float(data[2]) - float(first[2])
@@ -44,9 +47,11 @@ def import_camera(filepath: str, context: bpy.context):
         quat = Quaternion([rotW, -rotX, rotY, -rotZ])
         quat.rotate(Euler([math.radians(90), 0, 0]))
 
+        frame = (time_milis / 1000) * frame_rate
+
         camera_object.rotation_quaternion = quat
-        camera_object.keyframe_insert(data_path='location', frame=i)  
-        camera_object.keyframe_insert(data_path='rotation_quaternion', frame=i)  
+        camera_object.keyframe_insert(data_path='location', frame=math.floor(frame))  
+        camera_object.keyframe_insert(data_path='rotation_quaternion', frame=math.floor(frame))  
 
 class ImportCameraOperator(bpy.types.Operator, ImportHelper):
     bl_idname = "mcam.import_camera"
