@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "camcapture",
+  "version": "${version}",
+
+  "name": "Camera Capture",
+  "description": "Used to capture Minecraft camera movements for export into Blender",
+  "authors": [
+    "Igrium"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+
+  "license": "GPL",
+  "icon": "assets/modid/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+    ],
+    "client": [
+      "org.scaffoldeditor.camera_capture.CameraCapture"
+    ]
+  },
+  "mixins": [
+    "modid.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.11.3",
+    "fabric": "*",
+    "minecraft": "1.17.x",
+    "java": ">=16"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
