@@ -50,8 +50,8 @@ def import_camera(filepath: str, context: bpy.context):
         frame = (time_milis / 1000) * frame_rate
 
         camera_object.rotation_quaternion = quat
-        camera_object.keyframe_insert(data_path='location', frame=math.floor(frame))  
-        camera_object.keyframe_insert(data_path='rotation_quaternion', frame=math.floor(frame))  
+        camera_object.keyframe_insert(data_path='location', frame=frame)  
+        camera_object.keyframe_insert(data_path='rotation_quaternion', frame=frame)  
 
 class ImportCameraOperator(bpy.types.Operator, ImportHelper):
     bl_idname = "mcam.import_camera"
